@@ -6,11 +6,11 @@ import Spinner from "../Spinner.jsx";
 
 export default function BuyerRoute() {
   const [ok, setOk] = useState(false);
-  const [auth, setAuth] = useAuth();
+  const [auth] = useAuth();
 
   useEffect(() => {
     const authCheck = async () => {
-      const res = await axios.get("http://localhost:8080/api/v1/auth/check-buyer");
+      const res = await axios.get("https://rentify-1-yzdd.onrender.com/api/v1/auth/check-buyer");
       if (res.data.ok) {
         setOk(true);
       } else {

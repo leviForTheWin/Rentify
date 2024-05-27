@@ -20,7 +20,7 @@ const SellerDeleteProperties = () => {
     if (auth && auth.user) {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/v1/seller/my-properties/${auth.user._id}`
+          `https://rentify-1-yzdd.onrender.com/api/v1/seller/my-properties/${auth.user._id}`
         );
         setProperties(response.data.properties);
       } catch (error) {
@@ -32,7 +32,7 @@ const SellerDeleteProperties = () => {
   const handleDelete = async (propertyId) => {
     try {
       await axios.delete(
-        `http://localhost:8080/api/v1/seller/property/${propertyId}`,
+        `https://rentify-1-yzdd.onrender.com/api/v1/seller/property/${propertyId}`,
         {
           headers: { Authorization: auth.token },
         }

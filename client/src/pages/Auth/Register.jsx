@@ -28,7 +28,7 @@ export default function Register() {
     try {
       const data = new FormData(event.currentTarget);
       const response = await axios.post(
-        "http://localhost:8080/api/v1/auth/register",
+        "https://rentify-1-yzdd.onrender.com/api/v1/auth/register",
         {
           email: data.get("email"),
           password: data.get("password"),

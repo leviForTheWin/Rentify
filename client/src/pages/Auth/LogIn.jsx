@@ -18,7 +18,7 @@ const handleSubmit = async (event) => {
   try {
     const data = new FormData(event.currentTarget);
     const response = await axios.post(
-      "http://localhost:8080/api/v1/auth/login",
+      "https://rentify-1-yzdd.onrender.com/api/v1/auth/login",
       {
         email: data.get("email"),
         password: data.get("password"),

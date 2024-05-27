@@ -8,7 +8,7 @@ const HomePage = () => {
 
   const fetchProperties = async () => {
     const { data } = await axios.get(
-      "http://localhost:8080/api/v1/buyer/properties",
+      "https://rentify-1-yzdd.onrender.com/api/v1/buyer/properties",
     );
     setProperties(data.properties);
   };

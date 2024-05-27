@@ -38,7 +38,7 @@ const SellerAddNewProperty = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/seller/new-property",
+        "https://rentify-1-yzdd.onrender.com/api/v1/seller/new-property",
         {
           ...formData,
           ownerId: auth.user._id, 

@@ -20,7 +20,7 @@ export default function PropertyCard(props) {
 
     try {
       const response = await axios.put(
-        `http://localhost:8080/api/v1/buyer/like/${myProperty._id}`,
+        `https://rentify-1-yzdd.onrender.com/api/v1/buyer/like/${myProperty._id}`,
         {
           likedCount: newCount,
         }

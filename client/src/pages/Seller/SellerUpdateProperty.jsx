@@ -13,7 +13,7 @@ const SellerUpdateProperty = () => {
   const fetchProperty = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/v1/seller/property/${propertyId}`
+        `https://rentify-1-yzdd.onrender.com/api/v1/seller/property/${propertyId}`
       );
       setFormData(response.data.property);
     } catch (error) {
@@ -54,7 +54,7 @@ const SellerUpdateProperty = () => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:8080/api/v1/seller/property/${propertyId}`,
+        `https://rentify-1-yzdd.onrender.com/api/v1/seller/property/${propertyId}`,
         { ...formData, ownerId: auth.user._id },
         {
           headers: { Authorization: auth.token },
