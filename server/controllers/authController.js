@@ -44,7 +44,7 @@ export const loginController = async (req, res) => {
     if (error)
       return res
         .status(400)
-        .send({ success: false, message: error.details[0].message });
+        .send({ success: false, message: "Please enter email and password" });
 
     //check user
     const user = await User.findOne({ email: req.body.email });

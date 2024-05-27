@@ -1,4 +1,3 @@
-import * as React from "react";
 import { useState } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -15,8 +14,8 @@ export default function PropertyCard(props) {
   const [liked, setLiked] = useState(false);
 
   const handleClick = async () => {
-    setLiked(!liked);
     const newCount = liked ? count - 1 : count + 1;
+    setLiked(!liked);
     setCount(newCount);
 
     try {
@@ -26,6 +25,7 @@ export default function PropertyCard(props) {
           likedCount: newCount,
         }
       );
+      // console.log(response);
       alert("Like count updated successfully");
       // console.log(response.data);
     } catch (error) {
@@ -35,7 +35,7 @@ export default function PropertyCard(props) {
 
   const handleOwnerDetails = () => {
     alert(
-      `Owner Name: ${myProperty.ownerEmail}`
+      `Owner Email: ${myProperty.ownerEmail}`
     );
   };
 

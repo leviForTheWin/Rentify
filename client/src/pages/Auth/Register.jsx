@@ -38,7 +38,7 @@ export default function Register() {
           buyer: selectedRole === "Buyer" ? true : false,
         }
       );
-      console.log(response.data);
+      // console.log(response.data);
       alert("User registered successfully");
       window.location.href = "/login";
     } catch (error) {

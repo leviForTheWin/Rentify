@@ -1,4 +1,3 @@
-import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -34,7 +33,7 @@ const handleSubmit = async (event) => {
       alert("Invalid Credentials");
     }
   } catch (err) {
-    console.log(err);
+    alert(err.response.data.message);
   }
 };
 

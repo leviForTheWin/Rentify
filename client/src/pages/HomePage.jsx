@@ -1,4 +1,3 @@
-import React from "react";
 import { useState, useEffect } from "react";
 import PropertyCard from "../components/Layout/PropertyCard.jsx";
 import axios from "axios";
@@ -11,7 +10,6 @@ const HomePage = () => {
     const { data } = await axios.get(
       "http://localhost:8080/api/v1/buyer/properties",
     );
-    // console.log(data.properties);
     setProperties(data.properties);
   };
 

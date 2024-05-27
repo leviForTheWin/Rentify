@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import SellerMenu from "../../components/Layout/SellerMenu.jsx";
 import { useAuth } from "../../context/auth.jsx";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import PropertyCard2 from "../../components/Layout/PropertyCard2.jsx";
 
 const SellerDeleteProperties = () => {
   const [auth] = useAuth();
@@ -28,10 +29,6 @@ const SellerDeleteProperties = () => {
     }
   };
 
-  useEffect(() => {
-    fetchProperties();
-  }, [auth.user._id]);
-
   const handleDelete = async (propertyId) => {
     try {
       await axios.delete(
@@ -43,12 +40,16 @@ const SellerDeleteProperties = () => {
       setProperties(
         properties.filter((property) => property._id !== propertyId)
       );
-      alert("Property deleted successfully");
+      alert("Deleted property with id: " + propertyId);
     } catch (error) {
       console.error("Error deleting property", error);
       alert("Error deleting property");
     }
   };
+
+  useEffect(() => {
+    fetchProperties();
+  }, [auth.user._id]);
 
   return (
     <div className="container-fluid m-3 p-3 dashboard">
@@ -59,18 +60,15 @@ const SellerDeleteProperties = () => {
         <div className="col-md-9">
           <h2>Delete Properties</h2>
           {properties.length > 0 ? (
-            <div className="property-list">
+            <div className="properties-container">
               {properties.map((property) => (
-                <div key={property._id} className="property-item">
-                  <h4>{property.name}</h4>
-                  <p>{property.address}</p>
-                  <button
-                    className="btn btn-danger"
-                    onClick={() => handleDelete(property._id)}
-                  >
-                    Delete
-                  </button>
-                </div>
+                <PropertyCard2
+                  key={property._id}
+                  property={property}
+                  action="delete"
+                  handleDelete={handleDelete}
+                  className="property-card"
+                />
               ))}
             </div>
           ) : (

@@ -4,34 +4,46 @@ import User from "../models/userModel.js";
 export const addNewPropertyController = async (req, res) => {
   try {
     const propertyDetails = req.body;
-    // console.log(propertyDetails);
+
+    // Validate that all required fields are present
+    const requiredFields = [
+      "name", "price", "area", "address", "city", "state", "country", 
+      "zip", "image", "numberOfBedrooms", "numberOfBathrooms", 
+      "nearbyHospital", "nearbyCollege", "ownerId"
+    ];
+    for (const field of requiredFields) {
+      if (!propertyDetails[field]) {
+        return res.status(400).json({
+          message: `Field ${field} is required`,
+        });
+      }
+    }
+
+    // Fetch owner details
     const owner = await User.findById(propertyDetails.ownerId);
+    if (!owner) {
+      return res.status(404).json({
+        message: "Owner not found",
+      });
+    }
+
+    // Create and save new property
     const property = new Property({
-      name: propertyDetails.name,
-      price: propertyDetails.price,
-      area: propertyDetails.area,
-      address: propertyDetails.address,
-      city: propertyDetails.city,
-      state: propertyDetails.state,
-      country: propertyDetails.country,
-      zip: propertyDetails.zip,
-      image: propertyDetails.image,
-      numberOfBedrooms: propertyDetails.numberOfBedrooms,
-      numberOfBathrooms: propertyDetails.numberOfBathrooms,
-      nearbyHospital: propertyDetails.nearbyHospital,
-      nearbyCollege: propertyDetails.nearbyCollege,
+      ...propertyDetails,
       owner: propertyDetails.ownerId,
-      ownerEmail: owner.ownerEmail,
+      ownerEmail: owner.email,
     });
+    
     await property.save();
     res.status(201).json({
       message: "Property added successfully",
       property,
     });
   } catch (error) {
+    console.error("Error adding new property:", error); 
     res.status(500).json({
       message: "Internal server error",
-      error,
+      error: error.message,
     });
   }
 };
@@ -75,53 +87,89 @@ export const getPropertyByIdController = async (req, res) => {
 
 export const updatePropertyController = async (req, res) => {
   try {
-    const property = await Property.findById(req.params.id);
+    const propertyId = req.params.id;
+    const propertyDetails = req.body;
+
+    // Validate the property ID
+    if (!propertyId.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).json({
+        message: "Invalid property ID format",
+      });
+    }
+
+    // Validate the property details
+    const requiredFields = [
+      'name', 'price', 'area', 'address', 'city', 'state', 'country', 'zip',
+      'image', 'numberOfBedrooms', 'numberOfBathrooms', 'nearbyHospital', 'nearbyCollege'
+    ];
+
+    for (let field of requiredFields) {
+      if (!propertyDetails[field]) {
+        return res.status(400).json({
+          message: `Missing required field: ${field}`,
+        });
+      }
+    }
+
+    // Find and update the property
+    const property = await Property.findByIdAndUpdate(
+      propertyId,
+      { $set: propertyDetails },
+      { new: true, runValidators: true }
+    );
+
     if (!property) {
       return res.status(404).json({
         message: "Property not found",
       });
     }
-    const { propertyDetails } = req.body;
-    property.name = propertyDetails.name;
-    property.price = propertyDetails.price;
-    property.area = propertyDetails.area;
-    property.address = propertyDetails.address;
-    property.city = propertyDetails.city;
-    property.state = propertyDetails.state;
-    property.country = propertyDetails.country;
-    property.zip = propertyDetails.zip;
-    property.image = propertyDetails.image;
-    property.numberOfBedrooms = propertyDetails.numberOfBedrooms;
-    property.numberOfBathrooms = propertyDetails.numberOfBathrooms;
-    property.nearbyHospital = propertyDetails.nearbyHospital;
-    property.nearbyCollege = propertyDetails.nearbyCollege;
-    await property.save();
+
+    // console.log("Property updated:", property);
     res.status(200).json({
       message: "Property updated successfully",
       property,
     });
   } catch (error) {
+    console.error("Error updating property:", error);
     res.status(500).json({
       message: "Internal server error",
+      error,
     });
   }
 };
 
+
 export const deletePropertyController = async (req, res) => {
   try {
-    const property = await Property.findById(req.params.id);
+    const propertyId = req.params.id;
+
+    const property = await Property.findById(propertyId);
     if (!property) {
       return res.status(404).json({
         message: "Property not found",
       });
     }
-    await property.remove();
+
+    // Check if the authenticated user is the owner of the property or an admin
+    const owner = await User.findById(property.owner._id);
+    // console.log("Owner found:", owner);
+    if (!owner) {
+      return res.status(404).json({
+        message: "Owner not found",
+      });
+    }
+
+    // Delete the property
+    await Property.findByIdAndDelete(propertyId);
+
     res.status(200).json({
       message: "Property deleted successfully",
     });
   } catch (error) {
+    console.error("Error deleting property:", error); 
     res.status(500).json({
       message: "Internal server error",
+      error: error.message,  
     });
   }
 };

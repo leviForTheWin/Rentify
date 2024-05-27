@@ -15,14 +15,28 @@ export const getAllPropertiesController = async (req, res) => {
 
 export const likePropertyController = async (req, res) => {
   try {
-    const property = await Property.findById(req.params.id);
+    const propertyId = req.params.id;
+    const propertyLikedCount = req.body.likedCount;
+
+    // Validate the property ID
+    if (!propertyId.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).json({
+        message: "Invalid property ID format",
+      });
+    }
+
+    // Find and update the property
+    const property = await Property.findByIdAndUpdate(
+      propertyId,
+      {likedCount: propertyLikedCount }
+    );
+
     if (!property) {
       return res.status(404).json({
         message: "Property not found",
       });
     }
-    property.likedCount = req.body.likedCount;
-    await property.save();
+
     res.status(200).json({
       message: "Property liked successfully",
       property,

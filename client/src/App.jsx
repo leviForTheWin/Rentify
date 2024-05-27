@@ -1,4 +1,4 @@
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import LogIn from "./pages/Auth/LogIn.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import PageNotFound from "../src/pages/PageNotFound.jsx";
@@ -15,6 +15,7 @@ import SellerUpdateProperties from "./pages/Seller/SellerUpdateProperties.jsx";
 import SellerDeleteProperties from "./pages/Seller/SellerDeleteProperties.jsx";
 import BuyerDashboard from "./pages/Buyer/BuyerDashboard.jsx";
 import YourLikedProperties from "./pages/Buyer/YourLikedProperties.jsx";
+import SellerUpdateProperty from "./pages/Seller/SellerUpdateProperty.jsx";
 
 function App() {
   return (
@@ -32,6 +33,10 @@ function App() {
           <Route
             path="seller/update-properties"
             element={<SellerUpdateProperties />}
+          />
+          <Route
+            path="seller/update-properties/:id"
+            element={<SellerUpdateProperty />}
           />
           <Route
             path="seller/delete-properties"
